@@ -1,5 +1,3 @@
-#This code adds the draw4 challenge functionality.
-
 import random
 from os import system
 
