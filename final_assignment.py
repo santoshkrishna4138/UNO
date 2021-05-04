@@ -1,5 +1,5 @@
 #This code adds the draw4 challenge functionality.
-#adding another comment
+
 
 import random
 from os import system
@@ -12,6 +12,7 @@ list_players=[]
 reverse_flag=True
 EFFECTIVE=True
 EFFECTIVE_CARD=""
+previous_card_to_the_previous_card=""
 def create_deck():
     deck=[]
     colors=["RED-","BLUE-","GREEN-","YELLOW-"]
@@ -76,15 +77,18 @@ class player:
         global EFFECTIVE
         global wild_flag
         global wild_draw4_flag
+        global previous_card_to_the_previous_card
         if(card in self.hand):
             if(self.check(card)):
                 self.hand.remove(card)
+                previous_card_to_the_previous_card=previous_card
                 previous_card=card
                 if(card=="WILD") or (card=="WILD-DRAW4"):
                     if(card=="WILD"):
                         wild_flag=True
                     else:
                         wild_draw4_flag=True
+                        
                         
                     while(True):
                         input1=input("Which color do you want to change to ?[YELLOW,GREEN,BLUE,RED]: ")
@@ -279,12 +283,73 @@ while(FLAGOMANIA):
                     else:
                         i-=1  
                 elif(EFFECTIVE_CARD=="DRAW4"):
-                    list_players[i%number1].pick(4)
-                    EFFECTIVE=False
+                    system('cls')
                     if(reverse_flag):
-                        i+=1
+                        print(str(list_players[(i-1)%number1].name) +" has played a WILD-DRAW4 CARD!!")
                     else:
-                        i-=1
+                        print(str(list_players[(i+1)%number1].name) +" has played a WILD-DRAW4 CARD!!")    
+                    while(True):
+                        try:
+                            input1=input("Do you want to challenge his/her claim?  ")
+                            if(input1=="--help"):
+                                system('cls')
+                                print("Rules are pretty simple, this game is a 2+ player game. \n All players are given 7 cards.\n When your turn comes, play a card that is either of the same color or same number.\n Goal is to finish first.\n Draw2 cards allow you to ask the next player draw 2 cards and skip his turn.\nSkip is a card when played makes the next player skip his turn.\n Reverse card when played reverses the direction of players.\n Wild card can be played at any time irrespective of which color/number was played last, it allows the player to change color. The next player will have to play card of that color.\n Wild-draw4 is same in functionality except the fact that it also forces the next player to pick four cards and skip the his turn.\n If u dont have a card to play then you take a card from the pile and forfeit your turn.\n Note: REVERSE CARD IS USELESS IS 2 PLAYER MODE ")
+               
+                                while(True):
+                                    try:
+                                        input2=input("Type --resume here to resume: ")
+                                        if(input2=="--resume"):
+                                            system('cls')
+                                            #input1=input("Do you want to challenge his/her claim?  ")
+                                            break
+                                        else:
+                                            raise Exception
+                                    except:
+                                        print("Invalid Input")
+                                #break
+                            elif((input1.upper()=="Y") or (input1.upper()=="N")):   
+                                if(input1.upper()=="Y"):
+                                    if(reverse_flag):
+                                        print(str(list_players[(i-1)%number1].hand) +" are his/her cards!!")
+                                    else:
+                                        print(str(list_players[(i+1)%number1].name) +" are his/her cards!!")
+                                    check_for_wild_draw4=["",""]
+                                    check_for_wild_draw4=list_players[i%number1].seperate(previous_card_to_the_previous_card)       
+                                    if(reverse_flag):
+                                        if((check_for_wild_draw4[0] in str(list_players[(i-1)%number1].hand)) or ((check_for_wild_draw4[1] in str(list_players[(i-1)%number1].hand)))):
+                                            print("YOU ARE RIGHT!!!!")
+                                            list_players[(i-1)%number1].pick(4)
+                                            #i+=1
+                                        else:
+                                            print("YOU WERE WRONG!!")
+                                            list_players[i%number1].pick(6)
+                                            i+=2
+                                    else:
+                                        if((check_for_wild_draw4[0] in str(list_players[(i+1)%number1].hand)) or ((check_for_wild_draw4[1] in str(list_players[(i+1)%number1].hand)))):
+                                            print("YOU ARE RIGHT!!!!")
+                                            list_players[(i+1)%number1].pick(4)
+                                            #i-=1
+                                        else:
+                                            print("YOU WERE WRONG!!")
+                                            list_players[i%number1].pick(6)
+                                            i-=2
+                                else:
+                                    list_players[i%number1].pick(4)
+                                    if(reverse_flag):
+                                        i+=1
+                                    else:
+                                        i-=1
+                                    #break        
+                                break
+                            else:
+                                raise Exception
+                        except Exception as e:
+                            print(input1.upper())
+                            print("INVALID INPUT")
+                            print(e)
+                    #list_players[i%number1].pick(4)
+                    EFFECTIVE=False
+                    
                     #print(i)
                 else:
                     EFFECTIVE=False
