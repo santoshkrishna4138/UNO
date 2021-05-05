@@ -323,7 +323,7 @@ while(FLAGOMANIA):
                                         else:
                                             print("YOU WERE WRONG!!")
                                             list_players[i%number1].pick(6)
-                                            i+=2
+                                            i+=1
                                     else:
                                         if((check_for_wild_draw4[0] in str(list_players[(i+1)%number1].hand)) or ((check_for_wild_draw4[1] in str(list_players[(i+1)%number1].hand)))):
                                             print("YOU ARE RIGHT!!!!")
@@ -332,7 +332,7 @@ while(FLAGOMANIA):
                                         else:
                                             print("YOU WERE WRONG!!")
                                             list_players[i%number1].pick(6)
-                                            i-=2
+                                            i-=1
                                 else:
                                     list_players[i%number1].pick(4)
                                     if(reverse_flag):
